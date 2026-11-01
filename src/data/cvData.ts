@@ -37,7 +37,8 @@ export interface CVData {
   location: string;
   email: string;
   iitEmail: string;
-  phone: string;
+  /** base64 of the phone number: kept out of plain text, revealed on click */
+  phoneEnc: string;
   github: string;
   linkedin: string;
   website: string;
@@ -48,6 +49,8 @@ export interface CVData {
   timeline: ExperienceItem[];
   leadership: { role: string; org: string; period: string; bullets: string[] }[];
 }
+
+export const decodePhone = (): string => atob(cvData.phoneEnc);
 
 export const cvData: CVData = {
   name: "Hemant Patel",
@@ -61,7 +64,7 @@ export const cvData: CVData = {
   location: "IIT Jodhpur, Rajasthan, India",
   email: "patelhemant.7509@gmail.com",
   iitEmail: "b23ch1018@iitj.ac.in",
-  phone: "+91 70676-91264",
+  phoneEnc: "KzkxIDcwNjc2LTkxMjY0",
   github: "https://github.com/hhemantpatel",
   linkedin: "https://www.linkedin.com/in/hemant-patel-992753369/",
   website: "https://github.com/hhemantpatel",

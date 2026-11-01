@@ -3,6 +3,7 @@ import { useGame } from '../../context/GameContext';
 import { cvData } from '../../data/cvData';
 import { X, Printer, Mail, MapPin, Github, Linkedin, ExternalLink, Phone, FileText } from 'lucide-react';
 import { tw } from './kit/theme';
+import { PhoneReveal } from './PhoneReveal';
 
 /** Restrained section heading: warm game colours, but résumé-clean. */
 const SectionHeading: React.FC<{ children: React.ReactNode }> = ({ children }) => (
@@ -111,7 +112,10 @@ export const RecruiterCVModal: React.FC = () => {
               </li>
               <li className="flex items-center gap-1.5">
                 <Phone className="w-3.5 h-3.5 text-[#9a6a43]" aria-hidden />
-                {cvData.phone}
+                <PhoneReveal
+                  linkClassName={linkCls}
+                  buttonClassName={`${linkCls} underline print:hidden`}
+                />
               </li>
               <li>
                 <a href={cvData.github} target="_blank" rel="noreferrer" className={linkCls}>
@@ -122,7 +126,7 @@ export const RecruiterCVModal: React.FC = () => {
               <li>
                 <a href={cvData.linkedin} target="_blank" rel="noreferrer" className={linkCls}>
                   <Linkedin className="w-3.5 h-3.5 text-[#9a6a43]" aria-hidden />
-                  linkedin.com/in/hemant-patel-992753369
+                  {cvData.linkedin.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '')}
                 </a>
               </li>
             </ul>

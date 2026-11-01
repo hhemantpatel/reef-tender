@@ -249,7 +249,7 @@ Every modal strictly adheres to the exact same visual design language:
    - Curiosities list: Drawing & Sketching, Table Tennis, Badminton, Media & Filmmaking.
 2. **Experience Expedition Passport (`ExperiencePassportModal`)**:
    - Topographic route trail map with connected dashed trail lines and milestone waypoint pins:
-     - Checkpoint 03 Basecamp (CoralDune Systems Engineer)
+     - Checkpoint 03 Basecamp (CoralDune Software Developer Intern)
      - Checkpoint 02 Academic Citadel (IIT Jodhpur B.Tech)
      - Checkpoint 01 Origin (CBSE Class XII)
      - Leadership Outposts (FrameX Media Head, Festival Coordination)
@@ -383,7 +383,6 @@ To guarantee zero network overhead, zero latency, and 100% offline functionality
 
 ### Standard Development
 ```bash
-cd /home/hemant/personal_projects/clumsy-3d-cv-game
 npm run dev -- --host 0.0.0.0 --port 3000
 ```
 
@@ -395,7 +394,7 @@ Runs `tsc` (TypeScript compiler) followed by `vite build`. Outputs minified prod
 
 ### Rebuilding the Rust WASM Engine
 ```bash
-cd /home/hemant/personal_projects/clumsy-3d-cv-game/crates/game_engine_wasm
+cd crates/game_engine_wasm
 wasm-pack build --target web --out-dir ../../src/wasm/pkg
 ```
 

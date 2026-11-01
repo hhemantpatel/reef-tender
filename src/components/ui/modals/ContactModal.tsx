@@ -4,6 +4,7 @@ import { cvData } from '../../../data/cvData';
 import { GameModal } from '../kit/GameModal';
 import { tw, UI } from '../kit/theme';
 import { Mailbox } from './contact/Mailbox';
+import { PhoneReveal } from '../PhoneReveal';
 
 // Kit label uses 11px; keep every bit of text at >= 12px here.
 const label = tw.label.replace('text-[11px]', 'text-xs');
@@ -167,9 +168,10 @@ export const ContactModal: React.FC<{ onClose: () => void }> = ({ onClose }) => 
                     <Phone className="w-4 h-4" aria-hidden /> Phone
                   </dt>
                   <dd>
-                    <a href={`tel:${cvData.phone.replace(/[^\d+]/g, '')}`} className="font-bold text-sm text-[#2b1d16] hover:underline rounded focus:outline-none focus-visible:ring-4 focus-visible:ring-[#fde68a]">
-                      {cvData.phone}
-                    </a>
+                    <PhoneReveal
+                      linkClassName="font-bold text-sm text-[#2b1d16] hover:underline rounded focus:outline-none focus-visible:ring-4 focus-visible:ring-[#fde68a]"
+                      buttonClassName="font-bold text-sm text-[#b45309] underline rounded focus:outline-none focus-visible:ring-4 focus-visible:ring-[#fde68a]"
+                    />
                   </dd>
                 </div>
                 <div>
