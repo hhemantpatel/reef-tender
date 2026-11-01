@@ -228,8 +228,6 @@ export const CameraController: React.FC<CameraControllerProps> = ({ engine }) =>
     camera.position.set(camX, camY, camZ);
     camera.lookAt(state.targetPos);
 
-    (window as any).__camera = camera;
-    (window as any).__cameraState = state;
   });
 
   return null;

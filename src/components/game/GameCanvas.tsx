@@ -1,6 +1,6 @@
 import React, { Suspense, useEffect, useState } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { ContactShadows, Sparkles } from '@react-three/drei';
+import { ContactShadows, Sparkles, PerformanceMonitor } from '@react-three/drei';
 import { EffectComposer, Bloom, Vignette, HueSaturation } from '@react-three/postprocessing';
 import { SUN_POSITION, PALETTE } from './env/palette';
 import * as THREE from 'three';
@@ -17,10 +17,13 @@ import { Scenery } from './Scenery';
 import { SkyDome } from './SkyDome';
 import { CartoonSun } from './CartoonSun';
 import { Butterflies } from './Butterflies';
+import { isLowEnd } from '../../utils/device';
 
 export const GameCanvas: React.FC = () => {
   const [engine, setEngine] = useState<PhysicsEngine | null>(null);
   const { activeModal } = useGame();
+  // Adaptive resolution: PerformanceMonitor lowers it when the frame rate drops
+  const [dpr, setDpr] = useState<number>(isLowEnd ? 1 : 1.5);
 
   useEffect(() => {
     let mounted = true;
@@ -37,19 +40,23 @@ export const GameCanvas: React.FC = () => {
   return (
     <div className="w-full h-full relative">
       <Canvas
-        shadows="soft"
+        shadows={isLowEnd ? 'basic' : 'soft'}
         frameloop={activeModal && activeModal !== 'badminton' ? 'demand' : 'always'}
-        dpr={[1, 1.5]}
+        dpr={dpr}
         camera={{ position: [0, 11, 16], fov: 28, near: 0.1, far: 240 }}
         gl={{
-          antialias: true,
+          // MSAA only helps when rendering straight to the canvas (low tier has no EffectComposer)
+          antialias: isLowEnd,
           toneMapping: THREE.ACESFilmicToneMapping,
           toneMappingExposure: 1.25,
-          powerPreference: 'high-performance',
-          preserveDrawingBuffer: true,
+          powerPreference: isLowEnd ? 'default' : 'high-performance',
         }}
         className="w-full h-full"
       >
+        <PerformanceMonitor
+          onDecline={() => setDpr((d) => Math.max(0.75, d - 0.25))}
+          onIncline={() => setDpr((d) => Math.min(isLowEnd ? 1 : 1.5, d + 0.25))}
+        />
         <fog attach="fog" args={[PALETTE.skyHorizon, 45, 180]} />
 
         {/* 0. Procedural Gradient Sky Dome & 3D Cartoon Sunset Sun */}
@@ -62,8 +69,8 @@ export const GameCanvas: React.FC = () => {
           position={SUN_POSITION}
           intensity={2.35}
           color="#ffad5c"
-          shadow-mapSize-width={1024}
-          shadow-mapSize-height={1024}
+          shadow-mapSize-width={isLowEnd ? 512 : 1024}
+          shadow-mapSize-height={isLowEnd ? 512 : 1024}
           shadow-camera-near={1.0}
           shadow-camera-far={120}
           shadow-camera-left={-28}
@@ -90,16 +97,18 @@ export const GameCanvas: React.FC = () => {
           color="#3b1d11"
         />
 
-        {/* 4. Ambient Floating Golden-Peach Sparkles */}
-        <Sparkles
-          count={35}
-          scale={[24, 8, 24]}
-          position={[0, 3, 0]}
-          size={2.2}
-          speed={0.3}
-          color="#fed7aa"
-          opacity={0.65}
-        />
+        {/* 4. Ambient Floating Golden-Peach Sparkles (desktop only) */}
+        {!isLowEnd && (
+          <Sparkles
+            count={35}
+            scale={[24, 8, 24]}
+            position={[0, 3, 0]}
+            size={2.2}
+            speed={0.3}
+            color="#fed7aa"
+            opacity={0.65}
+          />
+        )}
 
         {/* 5. Majestic Outside Scenery (Forest Hills, Winding River, Countryside) */}
         <Scenery />
@@ -115,17 +124,21 @@ export const GameCanvas: React.FC = () => {
           <CameraController engine={engine} />
         </Suspense>
 
-        {/* 7. Clean High-Performance Post-Processing (multisampling={0} avoids 4x MSAA bandwidth overhead) */}
-        <EffectComposer multisampling={0}>
-          <Bloom
-            luminanceThreshold={0.85}
-            luminanceSmoothing={0.18}
-            intensity={0.45}
-            radius={0.5}
-          />
-          <HueSaturation saturation={0.28} />
-          <Vignette eskil={false} offset={0.24} darkness={0.22} />
-        </EffectComposer>
+        {/* 7. Post-processing (desktop only: a full-resolution offscreen pass is too costly on phones) */}
+        {!isLowEnd && (
+          <EffectComposer multisampling={0}>
+            <Bloom
+              mipmapBlur
+              levels={4}
+              luminanceThreshold={0.85}
+              luminanceSmoothing={0.18}
+              intensity={0.45}
+              radius={0.5}
+            />
+            <HueSaturation saturation={0.28} />
+            <Vignette eskil={false} offset={0.24} darkness={0.22} />
+          </EffectComposer>
+        )}
       </Canvas>
     </div>
   );

@@ -10,7 +10,6 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [isInsideHouse, setIsInsideHouse] = useState<boolean>(false);
   const [isMuted, setIsMuted] = useState<boolean>(false);
   const [nearbyZone, setNearbyZone] = useState<string | null>(null);
-  const [moveInput, setMoveInput] = useState<{ x: number; z: number }>({ x: 0, z: 0 });
   const [teleportTarget, setTeleportTarget] = useState<'spawn' | 'desk' | null>(null);
 
   const startGame = useCallback(() => {
@@ -84,8 +83,6 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
       unlockAudio,
       nearbyZone,
       setNearbyZone,
-      moveInput,
-      setMoveInput,
       teleportTarget,
       triggerTeleport,
       clearTeleport,
@@ -103,8 +100,6 @@ export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children
       unlockAudio,
       nearbyZone,
       setNearbyZone,
-      moveInput,
-      setMoveInput,
       teleportTarget,
       triggerTeleport,
       clearTeleport,

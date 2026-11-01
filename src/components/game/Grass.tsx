@@ -4,6 +4,7 @@ import { makeRng } from './env/GeoBuilder';
 import { GLSL_MEADOW, GLSL_NOISE, envUniforms, meadowUniforms } from './env/materials';
 import { PALETTE } from './env/palette';
 import { FENCE, isBlocked } from './env/layout';
+import { isLowEnd } from '../../utils/device';
 
 /**
  * ~20k instanced, wind-swept grass blades in a single draw call.
@@ -98,10 +99,7 @@ function createGrassMaterial(): THREE.MeshLambertMaterial {
 }
 
 function getGrassCellSize(): number {
-  if (typeof window === 'undefined') return 0.155;
-  const isMobileScreen = window.innerWidth < 768;
-  const isTouchDevice = typeof navigator !== 'undefined' && navigator.maxTouchPoints > 1 && window.innerWidth < 1024;
-  return isMobileScreen || isTouchDevice ? 0.22 : 0.155;
+  return isLowEnd ? 0.3 : 0.155;
 }
 
 function buildGrass(): THREE.InstancedMesh {

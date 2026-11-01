@@ -3,6 +3,7 @@ import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
 import { PhysicsEngine } from '../../wasm/pkg/game_engine_wasm';
 import { useGame } from '../../context/GameContext';
+import { moveInput } from '../../utils/moveInput';
 import { soundManager } from '../../utils/audio';
 import { CharacterModel } from './character/CharacterModel';
 import { createCharacterRig, disposeCharacterRig } from './character/rig';
@@ -75,7 +76,7 @@ export const Character: React.FC<CharacterProps> = ({ engine }) => {
 
   useEffect(() => () => disposeCharacterRig(rig), [rig]);
 
-  const { hasStarted, activeModal, setIsInsideHouse, setNearbyZone, moveInput, teleportTarget, clearTeleport } = useGame();
+  const { hasStarted, activeModal, setIsInsideHouse, setNearbyZone, teleportTarget, clearTeleport } = useGame();
 
   const keysRef = useRef<{ [key: string]: boolean }>({});
 

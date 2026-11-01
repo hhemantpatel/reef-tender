@@ -8,7 +8,12 @@ export default defineConfig({
     port: 3000,
     host: true,
   },
+  esbuild: {
+    pure: ['console.log', 'console.debug'],
+    drop: ['debugger'],
+  },
   build: {
+    target: 'es2020',
     chunkSizeWarningLimit: 1000,
     rollupOptions: {
       output: {

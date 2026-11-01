@@ -1,12 +1,13 @@
 import React, { useRef, useState, useCallback, useEffect } from 'react';
 import { useGame } from '../../context/GameContext';
 import { ModalType } from '../../types/game';
+import { moveInput } from '../../utils/moveInput';
 
 export const MobileControls: React.FC = () => {
-  const { setMoveInput, nearbyZone, openModal, activeModal, hasStarted } = useGame();
+  const { nearbyZone, openModal, activeModal, hasStarted } = useGame();
   const [touchActive, setTouchActive] = useState<boolean>(false);
   const [isTouchDevice, setIsTouchDevice] = useState<boolean>(false);
-  const [knobPos, setKnobPos] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+  const knobRef = useRef<HTMLDivElement>(null);
   const touchOrigin = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
   const touchId = useRef<number | null>(null);
 
@@ -17,6 +18,10 @@ export const MobileControls: React.FC = () => {
     );
   }, []);
 
+  const moveKnob = (x: number, y: number) => {
+    if (knobRef.current) knobRef.current.style.transform = `translate(${x}px, ${y}px)`;
+  };
+
   const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
     e.preventDefault();
     if (touchId.current !== null) return;
@@ -24,7 +29,7 @@ export const MobileControls: React.FC = () => {
     touchId.current = touch.identifier;
     touchOrigin.current = { x: touch.clientX, y: touch.clientY };
     setTouchActive(true);
-    setKnobPos({ x: 0, y: 0 });
+    moveKnob(0, 0);
   };
 
   const handleTouchMove = useCallback((e: TouchEvent) => {
@@ -42,16 +47,17 @@ export const MobileControls: React.FC = () => {
         const kx = Math.cos(angle) * clampedDist;
         const ky = Math.sin(angle) * clampedDist;
 
-        setKnobPos({ x: kx, y: ky });
+        moveKnob(kx, ky);
 
         // Normalize movement vector: X and Z (where dy maps to Z forward/back)
         const normX = kx / maxRadius;
         const normZ = ky / maxRadius;
-        setMoveInput({ x: normX, z: normZ });
+        moveInput.x = normX;
+        moveInput.z = normZ;
         break;
       }
     }
-  }, [setMoveInput]);
+  }, []);
 
   const handleTouchEnd = useCallback((e: TouchEvent) => {
     if (touchId.current === null) return;
@@ -60,12 +66,13 @@ export const MobileControls: React.FC = () => {
       if (touch.identifier === touchId.current) {
         touchId.current = null;
         setTouchActive(false);
-        setKnobPos({ x: 0, y: 0 });
-        setMoveInput({ x: 0, z: 0 });
+        moveKnob(0, 0);
+        moveInput.x = 0;
+        moveInput.z = 0;
         break;
       }
     }
-  }, [setMoveInput]);
+  }, []);
 
   useEffect(() => {
     window.addEventListener('touchmove', handleTouchMove, { passive: false });
@@ -83,10 +90,11 @@ export const MobileControls: React.FC = () => {
     if (activeModal) {
       touchId.current = null;
       setTouchActive(false);
-      setKnobPos({ x: 0, y: 0 });
-      setMoveInput({ x: 0, z: 0 });
+      moveKnob(0, 0);
+      moveInput.x = 0;
+      moveInput.z = 0;
     }
-  }, [activeModal, setMoveInput]);
+  }, [activeModal]);
 
   // Don't render mobile controls when not started, when a modal is open, or on non-touch devices
   if (!hasStarted || activeModal || !isTouchDevice) return null;
@@ -96,16 +104,14 @@ export const MobileControls: React.FC = () => {
       {/* Virtual Joystick Base */}
       <div
         onTouchStart={handleTouchStart}
-        className="pointer-events-auto w-28 h-28 rounded-full bg-slate-900/60 backdrop-blur-md border border-slate-700/60 shadow-xl flex items-center justify-center relative touch-none"
+        className="pointer-events-auto w-28 h-28 rounded-full bg-slate-900/60 border border-slate-700/60 shadow-xl flex items-center justify-center relative touch-none"
       >
         {/* Joystick Stick / Knob */}
         <div
+          ref={knobRef}
           className={`w-12 h-12 rounded-full bg-gradient-to-tr from-indigo-600 to-indigo-400 border border-indigo-300 shadow-md transform transition-transform ${
             touchActive ? 'scale-95' : 'scale-100'
           }`}
-          style={{
-            transform: `translate(${knobPos.x}px, ${knobPos.y}px)`,
-          }}
         />
       </div>
 

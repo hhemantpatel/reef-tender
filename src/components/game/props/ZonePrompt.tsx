@@ -164,7 +164,7 @@ export const ZonePrompt: React.FC<ZonePromptProps> = ({
         <Html position={position} center distanceFactor={14}>
           <button
             onClick={() => openModal(zone)}
-            className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#fffdfa]/95 text-[#451a03] text-xs font-bold shadow-xl border border-[#b45309]/60 hover:border-[#b45309] hover:scale-105 active:scale-95 transition-all cursor-pointer whitespace-nowrap backdrop-blur-md animate-fade-in"
+            className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#fffdfa]/95 text-[#451a03] text-xs font-bold shadow-xl border border-[#b45309]/60 hover:border-[#b45309] hover:scale-105 active:scale-95 transition-all cursor-pointer whitespace-nowrap animate-fade-in"
           >
             <span className="text-sm">{icon}</span>
             <span className="px-1.5 py-0.5 rounded-md bg-[#d97706] text-white font-mono text-[10px] font-black shadow-xs">

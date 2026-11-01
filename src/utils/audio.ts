@@ -103,6 +103,13 @@ class SoundManager {
       this.musicGain.gain.setValueAtTime(0.38, this.ctx.currentTime);
       this.musicGain.connect(this.masterGain);
 
+      // Stop all audio work while the tab is hidden (saves battery on phones)
+      document.addEventListener('visibilitychange', () => {
+        if (!this.ctx) return;
+        if (document.hidden) void this.ctx.suspend();
+        else void this.ctx.resume();
+      });
+
       // Initialize Real 3-minute Calm Acoustic Piano BGM
       this.initBGM();
 
@@ -118,9 +125,9 @@ class SoundManager {
   private initBGM() {
     if (typeof Audio === 'undefined' || this.bgmAudio || !this.ctx || !this.musicGain) return;
     try {
-      this.bgmAudio = new Audio('/audio/bgm.mp3');
+      this.bgmAudio = new Audio(`${import.meta.env.BASE_URL}audio/bgm.mp3`);
       this.bgmAudio.loop = true;
-      this.bgmAudio.preload = 'auto';
+      this.bgmAudio.preload = 'none';
 
       try {
         this.bgmSource = this.ctx.createMediaElementSource(this.bgmAudio);

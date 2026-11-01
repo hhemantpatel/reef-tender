@@ -37,7 +37,7 @@ export const Modals: React.FC = () => {
   }
 
   return (
-    <div className="game-fade-in fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-[#2b1d16]/45 backdrop-blur-[3px] overflow-y-auto">
+    <div className="game-fade-in fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-[#2b1d16]/45 overflow-y-auto">
       <div className="fixed inset-0" onClick={closeModal} aria-hidden />
 
       <div className="relative z-10 w-full flex items-center justify-center my-auto">

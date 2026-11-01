@@ -2,6 +2,7 @@ import React, { useRef, useMemo } from 'react';
 import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
 import { PhysicsEngine } from '../../wasm/pkg/game_engine_wasm';
+import { getParticleView } from '../../wasm/engine';
 
 interface ParticlesProps {
   engine: PhysicsEngine | null;
@@ -17,7 +18,7 @@ export const Particles: React.FC<ParticlesProps> = ({ engine }) => {
     if (!engine || !meshRef.current) return;
 
     // Fetch particle simulation data from Rust WASM
-    const data = engine.get_particles_data();
+    const data = getParticleView(engine);
     if (!data || data.length === 0) return;
 
     for (let i = 0; i < count; i++) {

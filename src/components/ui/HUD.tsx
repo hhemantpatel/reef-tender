@@ -31,7 +31,7 @@ export const HUD: React.FC = () => {
       {/* Top Header Bar */}
       <div className="flex items-center justify-between w-full">
         {/* Player Identity Plaque (Warm Cozy Game Style) */}
-        <div className="pointer-events-auto flex items-center gap-2.5 bg-[#fffdfa]/95 backdrop-blur-sm px-3.5 py-2 rounded-2xl border-2 border-[#d97706]/40 shadow-md text-[#451a03]">
+        <div className="pointer-events-auto flex items-center gap-2.5 bg-[#fffdfa]/95 px-3.5 py-2 rounded-2xl border-2 border-[#d97706]/40 shadow-md text-[#451a03]">
           <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-amber-500 to-amber-700 border border-amber-800 shadow-xs flex items-center justify-center text-base shrink-0">
             🧑‍💻
           </div>
@@ -49,7 +49,7 @@ export const HUD: React.FC = () => {
         {/* Action Controls Tray */}
         <div className="pointer-events-auto flex items-center gap-2">
           {/* Quick Travel Segments */}
-          <div className="hidden sm:flex items-center bg-[#fffdfa]/95 backdrop-blur-sm p-1 rounded-xl border-2 border-[#d97706]/40 shadow-md text-xs font-bold text-[#78350f]">
+          <div className="hidden sm:flex items-center bg-[#fffdfa]/95 p-1 rounded-xl border-2 border-[#d97706]/40 shadow-md text-xs font-bold text-[#78350f]">
             <button
               onClick={() => triggerTeleport('spawn')}
               className={`flex items-center gap-1 px-2.5 py-1 rounded-lg transition cursor-pointer ${
@@ -75,7 +75,7 @@ export const HUD: React.FC = () => {
           {/* Reset Camera View Button */}
           <button
             onClick={handleResetCamera}
-            className="hidden sm:flex items-center gap-1 px-2.5 py-2 rounded-xl bg-[#fffdfa]/95 hover:bg-[#faf5eb] backdrop-blur-sm border-2 border-[#d97706]/40 text-[#78350f] shadow-md text-xs font-bold transition cursor-pointer"
+            className="hidden sm:flex items-center gap-1 px-2.5 py-2 rounded-xl bg-[#fffdfa]/95 hover:bg-[#faf5eb] border-2 border-[#d97706]/40 text-[#78350f] shadow-md text-xs font-bold transition cursor-pointer"
             title="Reset Camera View [R]"
           >
             <RotateCcw className="w-3.5 h-3.5 text-[#b45309]" />
@@ -85,7 +85,7 @@ export const HUD: React.FC = () => {
           {/* Sound Toggle */}
           <button
             onClick={handleMuteClick}
-            className="p-2 rounded-xl bg-[#fffdfa]/95 hover:bg-[#faf5eb] backdrop-blur-sm border-2 border-[#d97706]/40 text-[#78350f] shadow-md transition cursor-pointer"
+            className="p-2 rounded-xl bg-[#fffdfa]/95 hover:bg-[#faf5eb] border-2 border-[#d97706]/40 text-[#78350f] shadow-md transition cursor-pointer"
             title={isMuted ? 'Unmute Sound' : 'Mute Sound'}
           >
             {isMuted ? <VolumeX className="w-4 h-4 text-[#dc2626]" /> : <Volume2 className="w-4 h-4 text-[#16a34a]" />}
@@ -106,7 +106,7 @@ export const HUD: React.FC = () => {
       {/* Bottom Controls / Location Indicator */}
       <div className="flex flex-col sm:flex-row items-center justify-between gap-2.5 w-full">
         {/* Current Location Badge (Wooden Trail Marker Style) */}
-        <div className="pointer-events-auto flex items-center gap-1.5 bg-[#fffdfa]/95 backdrop-blur-sm px-3 py-1.5 rounded-xl border-2 border-[#d97706]/40 text-xs font-medium text-[#451a03] shadow-md font-serif">
+        <div className="pointer-events-auto flex items-center gap-1.5 bg-[#fffdfa]/95 px-3 py-1.5 rounded-xl border-2 border-[#d97706]/40 text-xs font-medium text-[#451a03] shadow-md font-serif">
           <MapPin className="w-3.5 h-3.5 text-[#d97706]" />
           <span className="text-[#78350f]">Location:</span>
           <span className="font-black text-[#451a03]">
@@ -115,7 +115,7 @@ export const HUD: React.FC = () => {
         </div>
 
         {/* Keyboard & 3D Camera Controls Bar (Lightweight Game Legend) */}
-        <div className="hidden md:flex items-center gap-3 bg-[#fffdfa]/95 backdrop-blur-sm px-4 py-1.5 rounded-xl border-2 border-[#d97706]/40 text-xs text-[#78350f] shadow-md font-medium">
+        <div className="hidden md:flex items-center gap-3 bg-[#fffdfa]/95 px-4 py-1.5 rounded-xl border-2 border-[#d97706]/40 text-xs text-[#78350f] shadow-md font-medium">
           <div className="flex items-center gap-1">
             <span className="px-1.5 py-0.5 rounded bg-[#fef3c7] border border-[#fde68a] font-mono font-bold text-[10px] text-[#92400e]">W</span>
             <span className="px-1.5 py-0.5 rounded bg-[#fef3c7] border border-[#fde68a] font-mono font-bold text-[10px] text-[#92400e]">A</span>

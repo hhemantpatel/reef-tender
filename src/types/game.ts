@@ -13,9 +13,6 @@ export interface GameContextType {
   unlockAudio: () => void;
   nearbyZone: string | null;
   setNearbyZone: (zone: string | null) => void;
-  // Mobile touch controls input
-  moveInput: { x: number; z: number };
-  setMoveInput: (input: { x: number; z: number }) => void;
   // Reset / Teleport actions
   teleportTarget: 'spawn' | 'desk' | null;
   triggerTeleport: (target: 'spawn' | 'desk') => void;
