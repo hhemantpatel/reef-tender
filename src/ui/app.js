@@ -61,7 +61,6 @@ class App {
     this.uiClock = 0;
 
     this.buildNameTables();
-    this.applyTheme(this.saved?.theme ?? null);
 
     this.editor = new Editor(
       { textarea: $('code'), hl: $('hl'), gutter: $('gutter'), markers: $('markers') },
@@ -83,9 +82,6 @@ class App {
     this.checkSyntax();
 
     new ResizeObserver(() => this.renderer.resize()).observe($('reef').parentElement);
-    matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
-      if (!document.documentElement.dataset.theme) this.renderer.refreshTheme();
-    });
 
     if (!this.saved) $('intro').hidden = false;
     $('intro-go').addEventListener('click', () => {
@@ -145,7 +141,6 @@ class App {
       this.session.clearOutput();
       renderConsole($('console'), this.session);
     });
-    $('theme').addEventListener('click', () => this.cycleTheme());
     $('import-file').addEventListener('change', (e) => {
       const file = e.target.files[0];
       e.target.value = '';
@@ -304,8 +299,7 @@ class App {
       const game = Session.validateSave(data?.game);
       const code = typeof data.code === 'string' && data.code.length <= MAX_SCRIPT_CHARS ? data.code : STARTER_SCRIPT;
       const speed = Number.isInteger(data.speed) && data.speed >= 0 && data.speed < SPEEDS.length ? data.speed : 1;
-      const theme = data.theme === 'light' || data.theme === 'dark' ? data.theme : null;
-      localStorage.setItem(SAVE_KEY, JSON.stringify({ game, code, speed, theme }));
+      localStorage.setItem(SAVE_KEY, JSON.stringify({ game, code, speed }));
     } catch (e) {
       this.saveMessage(e.message, true);
       return;
@@ -318,24 +312,6 @@ class App {
     this.dirty = false;
     try { localStorage.removeItem(SAVE_KEY); } catch { /* blocked storage: reload still gives a fresh game */ }
     location.reload();
-  }
-
-  // --- theme ------------------------------------------------------------
-
-  applyTheme(theme) {
-    if (theme) document.documentElement.dataset.theme = theme;
-    else delete document.documentElement.dataset.theme;
-    this.theme = theme;
-  }
-
-  cycleTheme() {
-    const dark = document.documentElement.dataset.theme
-      ? document.documentElement.dataset.theme === 'dark'
-      : matchMedia('(prefers-color-scheme: dark)').matches;
-    this.applyTheme(dark ? 'light' : 'dark');
-    this.renderer.refreshTheme();
-    this.renderer.resize();
-    this.markDirty();
   }
 
   // --- persistence ------------------------------------------------------
@@ -356,7 +332,6 @@ class App {
       game: this.session.toJSON(),
       code: this.editor.value,
       speed: this.speed,
-      theme: this.theme,
     };
   }
 

@@ -7,7 +7,7 @@
 <title>Reef Tender</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap">
 <link rel="stylesheet" href="./src/style.css">
 </head>
 <body>
@@ -16,7 +16,7 @@
   <header class="deck">
     <div class="ident">
       <h1>Reef Tender</h1>
-      <p class="sub">ROV console &middot; write the code that tends the reef</p>
+      <p class="sub">a tiny drone, a coral reef, and your code</p>
     </div>
     <div class="ledger" id="ledger"></div>
     <div class="controls">
@@ -25,7 +25,6 @@
       </button>
       <button class="btn" id="step" type="button">Step</button>
       <div class="speeds" id="speeds" role="group" aria-label="Simulation speed"></div>
-      <button class="btn btn-icon" id="theme" type="button" title="Switch theme" aria-label="Switch theme">&#9681;</button>
     </div>
   </header>
 
@@ -41,6 +40,10 @@
     </section>
 
     <section class="workbench">
+      <div class="win-bar">
+        <span class="win-icon" aria-hidden="true">&gt;_</span>
+        <div class="win-title"><b>Drone terminal</b><span>write it, run it, watch the drone</span></div>
+      </div>
       <nav class="tabs" role="tablist">
         <button class="tab is-on" data-tab="script" role="tab" type="button">Script</button>
         <button class="tab" data-tab="lab" role="tab" type="button">Lab<span class="pip" id="lab-pip" hidden></span></button>
@@ -59,7 +62,7 @@
         </div>
         <div class="console" id="console-wrap">
           <div class="console-bar">
-            <span class="label">Console</span>
+            <span class="label">Log</span>
             <span class="spacer"></span>
             <span class="syntax" id="syntax"></span>
             <button class="btn btn-slim" id="clear-console" type="button">Clear</button>
