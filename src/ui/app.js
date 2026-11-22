@@ -5,6 +5,7 @@ import { createGameBuiltins } from '../game/api.js';
 import { GAME_LOCKED_NAMES } from '../game/techtree.js';
 import { Editor } from './editor.js';
 import { ReefRenderer } from './render.js';
+import { Reef3DRenderer } from './reef3d.js';
 import {
   renderLedger, renderReadouts, renderObjective, renderLab,
   renderManual, renderConsole, renderDepthScale,
@@ -74,8 +75,7 @@ class App {
       this.checkTimer = setTimeout(() => this.checkSyntax(), 400);
     };
 
-    this.renderer = new ReefRenderer($('reef'), this.session);
-    renderDepthScale($('depth'));
+    this.renderer = this.makeRenderer();
 
     this.wireControls();
     this.wireTabs();
@@ -99,6 +99,23 @@ class App {
 
     this.last = performance.now();
     requestAnimationFrame((t) => this.frame(t));
+  }
+
+  /** The 3D diorama when WebGL works; the flat 2D reef otherwise, so the game always runs. */
+  makeRenderer() {
+    try {
+      const r = new Reef3DRenderer($('reef'), this.session);
+      $('depth').hidden = true;
+      $('reef').parentElement.classList.add('is-3d');
+      return r;
+    } catch (e) {
+      console.warn('3D view unavailable, using the 2D reef:', e);
+      const canvas = $('reef');
+      const fresh = canvas.cloneNode(false); // a canvas that tried WebGL cannot give a 2D context
+      canvas.replaceWith(fresh);
+      renderDepthScale($('depth'));
+      return new ReefRenderer(fresh, this.session);
+    }
   }
 
   // --- names ------------------------------------------------------------

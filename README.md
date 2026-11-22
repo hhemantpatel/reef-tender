@@ -5,7 +5,10 @@ reef — you write the program that does. Every unlock widens either the world o
 **the language itself**: you buy your first `while` loop with kelp.
 
 Written in a Python-like mini-language with a custom lexer, parser and
-generator-based interpreter. Ships as one self-contained HTML file.
+generator-based interpreter. The reef is a 3D sunset diorama in three.js: a
+sandy island with the reef in a tide pool, a toy drone, palms and a dock. If
+WebGL is unavailable it falls back to a flat 2D canvas view. Drag to orbit the
+view and scroll or pinch to zoom.
 
 **Play it:** https://hhemantpatel.github.io/reef-tender/ (no install, runs in the browser).
 
@@ -20,22 +23,18 @@ November 2026, so the earlier history here belongs to a different project.
 
     npm test                # 51 tests: language + engine + save validation
     node test/balance.mjs   # throughput per tier + full playthrough timing
-    npm run build           # src/ -> dist/reef-tender.html
+    npm run dev             # local dev server
+    npm run build           # production build -> dist/
 
-To play locally: `cd dist && python3 -m http.server 8731`, then open
-<http://127.0.0.1:8731/reef-tender.html>.
+To play locally: `npm install && npm run dev`, then open the URL it prints.
 
 ## Layout
 
     src/lang/     lexer (indent-aware) -> parser (gates locked syntax) -> generator interpreter
     src/game/     world + growth + bleaching, the drone API, tech tree, session/save
-    src/ui/       canvas renderer, code editor, DOM panels, app wiring
+    src/ui/       3D reef (reef3d.js), 2D fallback (render.js), code editor, DOM panels, app wiring
     src/docs/     the in-game Manual
     test/         node:test suites, reference solutions, balance harness
-    build.mjs     strips import/export, concatenates in dependency order, inlines CSS
-
-`build.mjs` fails the build on duplicate top-level names, since every module
-lands in one scope.
 
 ## Design notes worth keeping
 

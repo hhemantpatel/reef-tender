@@ -31,15 +31,16 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
 
       - name: Test
         run: npm test
 
       - name: Build
-        run: |
-          npm run build
-          mkdir site
-          cp dist/reef-tender.html site/index.html
+        run: npm run build
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
@@ -47,7 +48,7 @@ jobs:
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './site'
+          path: './dist'
 
       - name: Deploy to GitHub Pages
         id: deployment

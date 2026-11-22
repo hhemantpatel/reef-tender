@@ -310,7 +310,7 @@ button { font: inherit; color: inherit; }
 
 .main {
   display: grid;
-  grid-template-columns: minmax(0, 1.02fr) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
   gap: 14px;
   padding: 14px;
   min-height: 0;
@@ -335,6 +335,16 @@ button { font: inherit; color: inherit; }
   box-shadow: inset 0 1px 0 #ffffff14, inset 0 0 22px #00000026;
 }
 .viewport canvas { display: block; width: 100%; height: 100%; }
+.viewport.is-3d { background: #ffb36b; }
+.viewport.is-3d canvas { cursor: grab; touch-action: none; }
+.viewport.is-3d canvas:active { cursor: grabbing; }
+.viewport.is-3d::after {
+  content: "";
+  position: absolute; inset: 0;
+  pointer-events: none;
+  box-shadow: inset 0 0 70px #3b1d1155;
+  border-radius: inherit;
+}
 
 .depth-scale {
   position: absolute;
