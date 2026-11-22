@@ -1,0 +1,90 @@
+<title>Reef Tender</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<style>
+{{CSS}}
+</style>
+
+<div class="app">
+  <header class="deck">
+    <div class="ident">
+      <h1>Reef Tender</h1>
+      <p class="sub">ROV console &middot; write the code that tends the reef</p>
+    </div>
+    <div class="ledger" id="ledger"></div>
+    <div class="controls">
+      <button class="btn btn-run" id="run" type="button">
+        <span class="glyph" aria-hidden="true"></span><span id="run-label">Run</span>
+      </button>
+      <button class="btn" id="step" type="button">Step</button>
+      <div class="speeds" id="speeds" role="group" aria-label="Simulation speed"></div>
+      <button class="btn btn-icon" id="theme" type="button" title="Switch theme" aria-label="Switch theme">&#9681;</button>
+    </div>
+  </header>
+
+  <main class="main">
+    <section class="viewport-wrap">
+      <div class="viewport">
+        <div class="depth-scale" id="depth" aria-hidden="true"></div>
+        <canvas id="reef"></canvas>
+        <div class="viewport-tag"><span id="reef-size">4 &times; 4</span></div>
+      </div>
+      <div class="readouts" id="readouts"></div>
+      <div class="objective" id="objective"></div>
+    </section>
+
+    <section class="workbench">
+      <nav class="tabs" role="tablist">
+        <button class="tab is-on" data-tab="script" role="tab" type="button">Script</button>
+        <button class="tab" data-tab="lab" role="tab" type="button">Lab<span class="pip" id="lab-pip" hidden></span></button>
+        <button class="tab" data-tab="manual" role="tab" type="button">Manual</button>
+      </nav>
+
+      <div class="panel is-on" data-panel="script">
+        <div class="editor" id="editor">
+          <div class="gutter" id="gutter" aria-hidden="true"></div>
+          <div class="code-area">
+            <div class="markers" id="markers" aria-hidden="true"></div>
+            <pre class="hl" id="hl" aria-hidden="true"></pre>
+            <textarea id="code" spellcheck="false" autocomplete="off" autocapitalize="off"
+              autocorrect="off" wrap="off" aria-label="Drone script"></textarea>
+          </div>
+        </div>
+        <div class="console" id="console-wrap">
+          <div class="console-bar">
+            <span class="label">Console</span>
+            <span class="spacer"></span>
+            <span class="syntax" id="syntax"></span>
+            <button class="btn btn-slim" id="clear-console" type="button">Clear</button>
+          </div>
+          <div class="console-out" id="console"></div>
+        </div>
+      </div>
+
+      <div class="panel" data-panel="lab"><div class="scroll" id="lab"></div></div>
+      <div class="panel" data-panel="manual"><div class="scroll" id="manual"></div></div>
+    </section>
+  </main>
+</div>
+
+<input type="file" id="import-file" accept="application/json,.json" hidden>
+
+<div class="intro" id="intro" hidden>
+  <div class="intro-card">
+    <p class="eyebrow">Deep reef survey &middot; unit 01</p>
+    <h2>The tender was replaced.</h2>
+    <p>You don't tend this reef. You write the program that does.</p>
+    <ol class="intro-steps">
+      <li><b>Run</b> your script and the drone follows it, one action per tick.</li>
+      <li>Harvest what grows. Spend it in the <b>Lab</b>.</li>
+      <li>The Lab sells <b>language features</b> too. You will buy your first <code>while</code> loop with kelp.</li>
+    </ol>
+    <p class="intro-note">Right now you have four lines and no loops. Start there.</p>
+    <button class="btn btn-run btn-wide" id="intro-go" type="button">Take the console</button>
+  </div>
+</div>
+
+<script type="module">
+{{JS}}
+</script>

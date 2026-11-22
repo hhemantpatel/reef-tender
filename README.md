@@ -1,85 +1,63 @@
-# 🎮 Clumsy Guy 3D Interactive CV Game
+# Reef Tender
 
-A personal 3D low-poly interactive CV and portfolio website where visitors control a clumsy character walking around a house and enclosed yard. The character features procedural wobbly walking, humorous physical collision stumbles, seamless indoor/outdoor exploration with dynamic camera occlusion cutaways, tactile CV inspection zones, an interactive code-driven farming mini-game ("The Farmer Was Replaced"), and an instant 2D "Recruiter Mode" resume view.
+A programming game in the spirit of *The Farmer Was Replaced*. You don't tend the
+reef — you write the program that does. Every unlock widens either the world or
+**the language itself**: you buy your first `while` loop with kelp.
 
-> 📖 **AI & Systems Architecture Guide**: For an exhaustive, deep technical breakdown of the Rust WASM engine, 3D rendering pipeline, Python interpreter mini-game, and unified archival UI system written for AI assistants and developers, see [AI_ARCHITECTURE_OVERVIEW.md](./AI_ARCHITECTURE_OVERVIEW.md).
+Written in a Python-like mini-language with a custom lexer, parser and
+generator-based interpreter. Ships as one self-contained HTML file.
 
----
+**Play it:** https://hhemantpatel.github.io/reef-tender/ (no install, runs in the browser).
 
-## ⚡ High-Performance Architecture
+Progress saves in the browser automatically. The Lab tab can export the save to
+a file, import one (checked before it is loaded), and reset. Every installed
+upgrade has a "Load into editor" button for its example snippet.
 
-- **Physics & Simulation Engine**: **Written in Rust** and compiled to **WebAssembly (WASM)** (`crates/game_engine_wasm/`).
-  - Continuous circle-AABB collision detection for all fences, house walls, and furniture.
-  - Procedural clumsy kinematics (wobble tilt, head bob, stumbling impulse recoil).
-  - 45+ floating autumn leaves & ambient dust wind particle physics simulated in Rust every frame.
-- **Rendering**: **Three.js** via **React Three Fiber (R3F)** and `@react-three/drei`.
-- **UI & Modals**: **Tailwind CSS** + **Lucide Icons** with glassmorphism overlays.
-- **Audio**: Embedded zero-asset **Web Audio API** sound synthesizer (footsteps, collision bumps, interaction chimes, gentle breeze ambience).
+Work on the game started in September 2026. It moved into this repository in
+November 2026, so the earlier history here belongs to a different project.
 
----
+## Commands
 
-## 🚀 Quick Start
+    npm test                # 51 tests: language + engine + save validation
+    node test/balance.mjs   # throughput per tier + full playthrough timing
+    npm run build           # src/ -> dist/reef-tender.html
 
-### 1. Development Server
-```bash
-npm install
-npm run dev
-```
-Open [http://localhost:3000](http://localhost:3000) in your browser.
+To play locally: `cd dist && python3 -m http.server 8731`, then open
+<http://127.0.0.1:8731/reef-tender.html>.
 
-### 2. Build for Production
-```bash
-npm run build
-```
-The optimized bundle will be generated in `dist/`.
+## Layout
 
-### 3. Rebuilding the Rust WASM Engine (Optional)
-If you edit the Rust code in `crates/game_engine_wasm/src/lib.rs`:
-```bash
-cd crates/game_engine_wasm
-wasm-pack build --target web --out-dir ../../src/wasm/pkg
-```
+    src/lang/     lexer (indent-aware) -> parser (gates locked syntax) -> generator interpreter
+    src/game/     world + growth + bleaching, the drone API, tech tree, session/save
+    src/ui/       canvas renderer, code editor, DOM panels, app wiring
+    src/docs/     the in-game Manual
+    test/         node:test suites, reference solutions, balance harness
+    build.mjs     strips import/export, concatenates in dependency order, inlines CSS
 
----
+`build.mjs` fails the build on duplicate top-level names, since every module
+lands in one scope.
 
-## 📁 Project Structure
+## Design notes worth keeping
 
-```
-├── crates/
-│   └── game_engine_wasm/       # Rust physics & particle simulation crate
-│       ├── Cargo.toml
-│       └── src/lib.rs          # Colliders, kinematics, stumble math, particle wind
-├── src/
-│   ├── components/
-│   │   ├── game/
-│   │   │   ├── Character.tsx   # Low-poly clumsy guy with procedural animations
-│   │   │   ├── House.tsx       # House model + dynamic roof/wall fading
-│   │   │   ├── Yard.tsx        # Fenced yard perimeter, paths, trees, flowers
-│   │   │   ├── Interactables.tsx# Desk, Bookshelf, Timeline, Bed, Mailbox, Bench
-│   │   │   ├── Particles.tsx   # Instanced leaves rendered from Rust WASM buffer
-│   │   │   ├── CameraController.tsx # Smooth 3rd-person follow camera
-│   │   │   └── GameCanvas.tsx  # Main R3F Canvas
-│   │   └── ui/
-│   │       ├── HUD.tsx         # Header, mute toggle, quick teleports, control hints
-│   │       ├── Modals.tsx      # Projects, Skills, Timeline, Contact, About, Easter Egg
-│   │       ├── RecruiterCVModal.tsx # Instant 2D printable resume
-│   │       └── MobileControls.tsx # Touch joystick for mobile
-│   ├── data/
-│   │   └── cvData.ts           # Central personal CV data (easy to customize!)
-│   ├── utils/
-│   │   └── audio.ts            # Web Audio API sound generator
-│   ├── wasm/                   # Compiled WASM package and TypeScript loader
-│   ├── App.tsx
-│   └── main.tsx
-```
+- **The interpreter is generators all the way down.** Every statement yields
+  before it runs; world actions yield again after. That one decision is what
+  gives pause, step, speed control and the live line marker in the editor.
+- **Locked syntax fails at parse time**, naming the unlock that grants it —
+  never as a confusing runtime error.
+- **`test/solutions.mjs` is load-bearing.** One reference solution per tier,
+  written with only that tier's unlocks. It proves the mini-language can express
+  each puzzle and is the yardstick `balance.mjs` measures.
+- **Bleaching sickens a tile, it doesn't sterilise it.** Clearing the entity made
+  the coral and shell puzzles unplayable the moment the Scrubber was unlocked.
+- **Wild kelp stops once Seeding is bought**, or it fights whatever the player is
+  trying to lay out at every later tier.
+- **Run parks the drone at the origin.** Without it, a script that walks the grid
+  by row index silently sorts an offset snake and can never finish.
+- **Coral dieback is tuned so a tight sweep can just hold a full reef together.**
+  Raise `CORAL_DIEBACK` and the bloom becomes unreachable; the balance harness
+  is how you check.
 
----
+## Balance
 
-## ✏️ How to Customize Your CV
-
-Open `src/data/cvData.ts` to update your information:
-- **`name` & `title`**: Your name and professional headline.
-- **`projects`**: Add or modify projects, live links, GitHub repos, and tech tags.
-- **`skillCategories`**: Update languages, frameworks, cloud tools, and proficiencies.
-- **`timeline`**: Add your work history, education, or achievements.
-- **`email`, `github`, `linkedin`**: Your direct links.
+Full tech tree is reachable in ~104k ticks with the reference solutions.
+Run `node test/balance.mjs` after touching any growth or payout constant.

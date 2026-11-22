@@ -1,25 +1,9 @@
 node_modules/
 dist/
-target/
-crates/**/target/
+site/
 .DS_Store
 *.log
-
-# secrets / private data
 .env
 .env.*
 !.env.example
-*.pem
-*.key
-*.pdf
-
-# source art
-*.blend
-*.blend1
-*.psd
-
-# editor / tooling
-.vscode/
-.idea/
-*.tsbuildinfo
 .claude/
